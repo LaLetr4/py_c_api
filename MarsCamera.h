@@ -15,6 +15,11 @@ public:
   void Disconnect() { Call("disconnect"); }
 
   /**
+    Gain modes we need for OMR
+  */
+  enum Gain { SuperHighGain = 0, LowGain = 1, HighGain = 2, SuperLowGain = 3 };
+
+  /**
     Sets OMR's key key to the value val
   */
   void OMRValue(const char * key, int val) { DictValue(OMR, key, val, "OMR"); }
@@ -34,6 +39,8 @@ public:
   */
   void WriteDAC() { Call("write_DACs", DAC); }
 
+  enum FrameCounter{ LFrame = 0, HFrame = 1 };
+
   /**
     Takes a picture with exposure exposure_sec and sleeps for wait_sec time interval
   */
@@ -44,14 +51,16 @@ public:
     2) Converts it from numpy to uint16_t
     3) Returns image (array)
   */
-  vector<uint16_t> & DownloadImage(char cnt, double wait_sec = 1);
+  vector<uint16_t> & DownloadImage(FrameCounter cnt, double wait_sec = 1);
+
   /**
     1) Takes a picture with exposure exposure_sec and sleeps for wait_sec time interval
     2) Downloads the picture to computer with cnt (L or H) threshold
     3) Converts it from numpy to uint16_t
     4) Returns image (array)
   */
-  vector<uint16_t> & GetImage(char cnt, double exposure_sec, double wait_sec = 1);
+  vector<uint16_t> & GetImage(FrameCounter cnt, double exposure_sec, double wait_sec = 1);
+
   PyObject * Instance() { return pInstance; }
   static bool verbose; //! test information on/off for debagging
 private:
@@ -99,7 +108,5 @@ private:
   */
   static void FatalError(const char * diag, int code = -1);
 
-  static int ParseCounter(char cnt);
 //   void PRN(PyObject * obj); //test print method for debugging
 };
-enum Gain { kSuperHighGain = 0, kLowGain = 1, kHighGain = 2, kSuperLowGain = 3 }; // Some thing we need for OMR

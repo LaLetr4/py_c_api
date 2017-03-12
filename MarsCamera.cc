@@ -59,7 +59,7 @@ MarsCamera::MarsCamera() {
     FatalError("with python class creation");
   }
   OMR = PyDict_New();//create new python dictionary
-  OMRValue("GainMode", kSuperHighGain);
+  OMRValue("GainMode", SuperHighGain);
   DAC = PyDict_New();
   DACValue("Threshold0", 80);
   DACValue("Threshold1", 90);
@@ -138,17 +138,13 @@ void MarsCamera::TakePicture(double exposure_sec, double wait_sec){
   usleep(wait_sec*1e6);
 }
 
-vector<uint16_t> & MarsCamera::GetImage(char cnt, double exposure_sec, double wait_sec) {
-  if(ParseCounter(cnt) == -1) return bitmap; // неправильный параметр счётчика, выходим
+vector<uint16_t> & MarsCamera::GetImage(FrameCounter cnt, double exposure_sec, double wait_sec) {
   TakePicture(exposure_sec, wait_sec); // делаем снимок
   return DownloadImage(cnt, wait_sec); // скачиваем картинку
 }
 
-vector<uint16_t> & MarsCamera::DownloadImage(char cnt, double wait_sec) {
-  int is_H = ParseCounter(cnt);
-  if(is_H == -1) return bitmap; // неправильный параметр счётчика, выходим
-
-  Call("download_image", is_H); // подгружаем сделанную картинку в поле frame
+vector<uint16_t> & MarsCamera::DownloadImage(FrameCounter cnt, double wait_sec) {
+  Call("download_image", cnt); // подгружаем сделанную картинку в поле frame
   usleep(wait_sec*1e6);
 
   // достаём картинку из поля frame
@@ -162,9 +158,9 @@ vector<uint16_t> & MarsCamera::DownloadImage(char cnt, double wait_sec) {
     Py_DECREF(pFrameArray);
     return bitmap;
   }
-  PyObject * pFrame = PyList_GetItem(pFrameArray, is_H);
+  PyObject * pFrame = PyList_GetItem(pFrameArray, cnt);
   if(!PyArray_Check(pFrame)) {
-    cerr<<" Warning: ``frame["<<is_H<<"]'' is not a numpy array!"<<endl;
+    cerr<<" Warning: ``frame["<<cnt<<"]'' is not a numpy array!"<<endl;
     Py_DECREF(pFrame);
     Py_DECREF(pFrameArray);
     return bitmap;
@@ -172,7 +168,7 @@ vector<uint16_t> & MarsCamera::DownloadImage(char cnt, double wait_sec) {
   PyArrayObject * pArray = reinterpret_cast<PyArrayObject*>(pFrame);
   int n_dim = PyArray_NDIM(pArray);
   if(n_dim != 2) {
-    cerr<<" Warning: ``frame["<<is_H<<"]'' is not a two-dimensional numpy array!"<<endl;
+    cerr<<" Warning: ``frame["<<cnt<<"]'' is not a two-dimensional numpy array!"<<endl;
     Py_DECREF(pFrame);
     Py_DECREF(pFrameArray);
     return bitmap;
@@ -184,16 +180,6 @@ vector<uint16_t> & MarsCamera::DownloadImage(char cnt, double wait_sec) {
   Py_DECREF(pFrame);
   Py_DECREF(pFrameArray);
   return bitmap;
-}
-
-int MarsCamera::ParseCounter(char cnt) {
-  int is_H = -1;
-  if(cnt == 'l' || cnt == 'L') is_H = 0;
-  if(cnt == 'h' || cnt == 'H') is_H = 1;
-  if(is_H == -1) {
-    cerr<<" Warning: Counter parameter should be ``L'' or ``H''"<<endl;
-  }
-  return is_H;
 }
 
 

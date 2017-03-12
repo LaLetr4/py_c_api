@@ -11,7 +11,7 @@ int main() {
   MarsCamera camera; //создали элемент класса
   camera.Connect("192.168.0.44"); //соединились по IP
 
-  camera.OMRValue("GainMode", kSuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
+  camera.OMRValue("GainMode", MarsCamera::SuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
   camera.WriteOMR(); //отправили на томограф (влить в предыдущую фукнцию?)
   cout<<" Written OMR"<<endl;
 
@@ -28,7 +28,7 @@ int main() {
   print "tested mask read and write"
 */
   //получаем с камеры снимок с выдержской 3 сек, ожиданием 1 сек и параметром l
-  vector<uint16_t> & bitmap = camera.GetImage('l', 3., 1.);
+  vector<uint16_t> & bitmap = camera.GetImage(MarsCamera::LFrame, 3., 1.);
 
   if (fmod(sqrt(bitmap.size()),1) != 0) {
     cout<<"bitmap is not a square!"<<endl;
