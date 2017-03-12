@@ -7,6 +7,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include "arrayobject.h"
 
 unsigned MarsCamera::counter = 0;
 bool MarsCamera::verbose = 0;
@@ -19,7 +20,8 @@ void MarsCamera::FatalError(const char * diag, int code/* = -1*/) {
   exit(code);
 }
 void MarsCamera::InitPy() {
-  Py_Initialize();
+  Py_Initialize(); // инициализируем Python C Api
+  import_array(); // инициализируем NumPy C Api
 
   PyObject * pName = PyUnicode_FromString("pyMarsCamera");
   pModule = PyImport_Import(pName);
@@ -136,43 +138,62 @@ void MarsCamera::TakePicture(double exposure_sec, double wait_sec){
   usleep(wait_sec*1e6);
 }
 
-uint16_t * MarsCamera::GetImage(char cnt, double exposure_sec, double wait_sec, size_t * sz) {
+vector<uint16_t> & MarsCamera::GetImage(char cnt, double exposure_sec, double wait_sec) {
+  if(ParseCounter(cnt) == -1) return bitmap; // неправильный параметр счётчика, выходим
+  TakePicture(exposure_sec, wait_sec); // делаем снимок
+  return DownloadImage(cnt, wait_sec); // скачиваем картинку
+}
+
+vector<uint16_t> & MarsCamera::DownloadImage(char cnt, double wait_sec) {
+  int is_H = ParseCounter(cnt);
+  if(is_H == -1) return bitmap; // неправильный параметр счётчика, выходим
+
+  Call("download_image", is_H); // подгружаем сделанную картинку в поле frame
+  usleep(wait_sec*1e6);
+
+  // достаём картинку из поля frame
+  PyObject * pFrameArray = PyObject_GetAttrString(pInstance, "frame");
+  if(pFrameArray == NULL) {
+    cerr<<" Warning: Unable to get ``frame'' attribute"<<endl;
+    return bitmap;
+  }
+  if(!PyList_Check(pFrameArray)) {
+    cerr<<" Warning: ``frame'' attribute is not a list!"<<endl;
+    Py_DECREF(pFrameArray);
+    return bitmap;
+  }
+  PyObject * pFrame = PyList_GetItem(pFrameArray, is_H);
+  if(!PyArray_Check(pFrame)) {
+    cerr<<" Warning: ``frame["<<is_H<<"]'' is not a numpy array!"<<endl;
+    Py_DECREF(pFrame);
+    Py_DECREF(pFrameArray);
+    return bitmap;
+  }
+  PyArrayObject * pArray = reinterpret_cast<PyArrayObject*>(pFrame);
+  int n_dim = PyArray_NDIM(pArray);
+  if(n_dim != 2) {
+    cerr<<" Warning: ``frame["<<is_H<<"]'' is not a two-dimensional numpy array!"<<endl;
+    Py_DECREF(pFrame);
+    Py_DECREF(pFrameArray);
+    return bitmap;
+  }
+  npy_intp * dims = PyArray_DIMS(pArray);
+  size_t sz = dims[0]*dims[1];
+  uint16_t * data = static_cast<uint16_t*>(PyArray_DATA(pArray));
+  bitmap.assign(data, data+sz);
+  Py_DECREF(pFrame);
+  Py_DECREF(pFrameArray);
+  return bitmap;
+}
+
+int MarsCamera::ParseCounter(char cnt) {
   int is_H = -1;
   if(cnt == 'l' || cnt == 'L') is_H = 0;
   if(cnt == 'h' || cnt == 'H') is_H = 1;
   if(is_H == -1) {
     cerr<<" Warning: Counter parameter should be ``L'' or ``H''"<<endl;
-    return 0;
   }
-  TakePicture(exposure_sec, wait_sec);
-  Call("download_image", is_H); // подгружаем сделанную картинку в поле frame
-  usleep(wait_sec*1e6);
-
-    PyObject * pFrame = PyObject_GetAttrString(pInstance, "frame");
-  if(pFrame == NULL) {
-    cerr<<" Warning: Unable to get ``frame'' attribute"<<endl;
-    return 0;
-  }
-//   PRN(pFrame);
-
-  PyObject * pImage = PyObject_CallMethod(pInstance, "get_frame", "(i)", is_H);
-  if(pImage == NULL) {
-    cerr<<" Warning: Unable to get image"<<endl;
-    PyErr_Print();
-    return 0;
-  }
-  Py_buffer view;
-  int res = PyObject_GetBuffer(pImage, &view, PyBUF_SIMPLE);
-  if(res == -1) {
-    cerr<<" Warning: Unable to get image"<<endl;
-    PyErr_Print();
-    return 0;
-  }
-  uint16_t * buf = reinterpret_cast<uint16_t*>(view.buf);
-  if(sz) *sz = view.len/sizeof(uint16_t);
-//   cout<<"view.len = "<<view.len<<endl;
-  Py_DECREF(pImage);
-  return buf;
+  return is_H;
 }
 
 

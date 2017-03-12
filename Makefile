@@ -4,6 +4,7 @@
 CXX      := g++
 CXXFLAGS := -O2 -g -Wall -fPIC -std=c++0x -Wno-write-strings -Wno-unused-function
 CXXFLAGS += -I/usr/include/python2.7
+CXXFLAGS += -I/usr/lib64/python2.7/site-packages/numpy/core/include/numpy
 LDFLAGS  := -O2 -g
 LDFLAGS  += -L/usr/lib/x86_64-linux-gnu -lpython2.7
 

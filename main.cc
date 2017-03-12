@@ -27,27 +27,20 @@ int main() {
   camera.test_mask_read_write(mask_K09 & 0x0fff)
   print "tested mask read and write"
 */
-  size_t image_size;
-  //получаем с камеры снимок (размером image_size) с выдержской 3 сек, ожиданием 1 сек и параметром l
-  uint16_t * bitmap = camera.GetImage('l', 3., 1., &image_size);
+  //получаем с камеры снимок с выдержской 3 сек, ожиданием 1 сек и параметром l
+  vector<uint16_t> & bitmap = camera.GetImage('l', 3., 1.);
 
-//   cout<<"test print of obtained bitmap: \n";
-//   for(size_t i = 0; i < 256; i++)
-//     for(size_t j = 0; j < 256; j++)
-// //         cout<<"i="<<i<<" j="<<j<<' '<<bitmap[i+j*image_size];
-//         cout<<' '<<bitmap[i+j*256];
-//     cout<<endl;
-//
-    if (fmod(sqrt(image_size),1)!=0){
-      cout<<"bitmap is not a square!"<<endl;
-    }else{
-      int width = sqrt(image_size);
-      ofstream fout("image_cpp");
-      for(size_t i = 0; i < image_size; i++){
-        fout<<bitmap[i]<<' ';
-        if (image_size%width == 0) fout<<endl;
-      }
-      fout.close();
+  if (fmod(sqrt(bitmap.size()),1) != 0) {
+    cout<<"bitmap is not a square!"<<endl;
+  } else {
+    size_t image_size = bitmap.size();
+    size_t width = sqrt(image_size);
+    ofstream fout("image_cpp");
+    for(size_t i = 0; i < image_size; i++){
+      fout<<bitmap[i]<<' ';
+      if (image_size%width == 0) fout<<endl;
     }
+    fout.close();
+  }
   camera.Disconnect();//отключились
 }
