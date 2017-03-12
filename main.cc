@@ -27,6 +27,8 @@ int main() {
   camera.test_mask_read_write(mask_K09 & 0x0fff)
   print "tested mask read and write"
 */
+  camera.UploadMask("/etc/mars/config/GaAs-N1-8-V5-05Nov2015-1455_software_colour_csm_full_0_mask.npy");
+
   //получаем с камеры снимок с выдержской 3 сек, ожиданием 1 сек и параметром l
   vector<uint16_t> & bitmap = camera.GetImage(MarsCamera::LFrame, 3., 1.);
 

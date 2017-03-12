@@ -182,7 +182,12 @@ vector<uint16_t> & MarsCamera::DownloadImage(FrameCounter cnt, double wait_sec) 
   return bitmap;
 }
 
-
+void MarsCamera::UploadMask(const char * maskName, uint16_t code /** = 0x0fff*/) {
+  PyObject * pValue =
+    PyObject_CallMethod(pInstance, const_cast<char*>("upload_mask"), "(si)", maskName, code);
+  if(CheckCall(pValue, "upload_mask"))
+    Py_DECREF(pValue);
+}
 
 
 

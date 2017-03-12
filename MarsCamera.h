@@ -61,6 +61,8 @@ public:
   */
   vector<uint16_t> & GetImage(FrameCounter cnt, double exposure_sec, double wait_sec = 1);
 
+  void UploadMask(const char * maskName, uint16_t code = 0x0fff);
+
   PyObject * Instance() { return pInstance; }
   static bool verbose; //! test information on/off for debagging
 private:

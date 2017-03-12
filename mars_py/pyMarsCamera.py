@@ -1581,12 +1581,19 @@ class marsCameraClient(marsObservable):
         """
         self.disconnect()
 
-    def get_frame(self, counter):
-        self.test_print_img(counter)
-        return self.frame[counter].tostring()
+    def upload_mask(self, name, code):
+        try:
+            mask = numpy.load(name)
+        except:
+            pass
+        if "mask" not in locals():
+            print "failed to read mask file", name
+        else:
+            print "read in mask file", name
+            self.test_mask_read_write(mask & code)
 
     """
-    For debagging, normally commented
+    For debugging, normally commented
     """
     #def test_print_ndarray(self,smth):
         #print smth.tolist()
