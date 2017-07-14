@@ -8,41 +8,29 @@ using std::endl;
 using std::ofstream;
 
 int main() {
-  MarsCamera camera; //создали элемент класса
-  camera.Connect("192.168.0.44"); //соединились по IP
+    MarsCamera camera; //создали элемент класса
+//     camera.verbose = 1;  //подробный тестовый вывод, по умолчанию 0
+//     camera.Connect("192.168.0.135"); //соединились по IP
+//     camera.Connect("192.168.0.29"); //соединились по IP
+    camera.Connect("192.168.0.46"); //соединились по IP
 
-  camera.OMRValue("GainMode", MarsCamera::SuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
-  camera.WriteOMR(); //отправили на томограф (влить в предыдущую фукнцию?)
-  cout<<" Written OMR"<<endl;
+    camera.OMRValue("GainMode", MarsCamera::SuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
+    camera.WriteOMR(); //отправили на томограф (влить в предыдущую фукнцию?)
+    cout<<" Written OMR"<<endl;
 
-  camera.DACValue("Threshold0", 80); //уcтановили Threshold0=80 в DAC "Threshold0"
-  camera.WriteDAC();
-  cout<<" Written DACs"<<endl;
+    camera.DACValue("Threshold0", 80); //уcтановили Threshold0=80 в DAC "Threshold0"
+    camera.WriteDAC();
+    cout<<" Written DACs"<<endl;
 
-/* TODO ?? если нужно ??
-  camera.upload_image(numpy.zeros([256, 256]), 0)
-  camera.upload_image(numpy.zeros([256, 256]), 1)
-  print "uploaded image"
+    /* TODO ?? если нужно ??
+    camera.upload_image(numpy.zeros([256, 256]), 0)
+    camera.upload_image(numpy.zeros([256, 256]), 1)
+    print "uploaded image"
 
-  camera.test_mask_read_write(mask_K09 & 0x0fff)
-  print "tested mask read and write"
-*/
-  camera.UploadMask("/etc/mars/config/GaAs-N1-8-V5-05Nov2015-1455_software_colour_csm_full_0_mask.npy");
-
-  //получаем с камеры снимок с выдержской 3 сек, ожиданием 1 сек и параметром l
-  vector<uint16_t> & bitmap = camera.GetImage(MarsCamera::LFrame, 3., 1.);
-
-  if (fmod(sqrt(bitmap.size()),1) != 0) {
-    cout<<"bitmap is not a square!"<<endl;
-  } else {
-    size_t image_size = bitmap.size();
-    size_t width = sqrt(image_size);
-    ofstream fout("image_cpp");
-    for(size_t i = 0; i < image_size; i++){
-      fout<<bitmap[i]<<' ';
-      if (image_size%width == 0) fout<<endl;
-    }
-    fout.close();
-  }
-  camera.Disconnect();//отключились
+    camera.test_mask_read_write(mask_K09 & 0x0fff)
+    print "tested mask read and write"
+    */
+    camera.TestMaskUpload();
+    camera.TestImageDownload();
+    camera.Disconnect();//отключились
 }

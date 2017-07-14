@@ -4,6 +4,7 @@
 #include <Python.h>
 #include <cstdint>
 #include <vector>
+#include <fstream>
 using std::vector;
 
 class MarsCamera {
@@ -65,6 +66,11 @@ public:
 
   PyObject * Instance() { return pInstance; }
   static bool verbose; //! test information on/off for debagging
+  
+  /*test functions:*/
+    void TestMaskUpload();
+    void TestImageDownload();
+  
 private:
   /** variables */
   static unsigned counter;

@@ -6,6 +6,7 @@
 using std::cout;
 using std::cerr;
 using std::endl;
+using std::ofstream;
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include "arrayobject.h"
 
@@ -23,7 +24,7 @@ void MarsCamera::InitPy() {
   Py_Initialize(); // инициализируем Python C Api
   import_array(); // инициализируем NumPy C Api
 
-  PyObject * pName = PyUnicode_FromString("pyMarsCamera");
+  PyObject * pName = PyUnicode_FromString("pyMarsCamera_new");
   pModule = PyImport_Import(pName);
   Py_DECREF(pName);
   if(pModule == NULL) {
@@ -43,7 +44,7 @@ void MarsCamera::InitPy() {
   if(verbose > 0) cerr<<" Module ``pyMarsCamera'' is succesfully loaded"<<endl;
 }
 void MarsCamera::FinalizePy() {
-  Py_DECREF(pClass);
+//   Py_DECREF(pClass);
   Py_DECREF(pDict);
   Py_DECREF(pModule);
   Py_Finalize();
@@ -58,6 +59,7 @@ MarsCamera::MarsCamera() {
     Py_Finalize();
     FatalError("with python class creation");
   }
+  //здесь будет нормальная подгрузка конфигов
   OMR = PyDict_New();//create new python dictionary
   OMRValue("GainMode", SuperHighGain);
   DAC = PyDict_New();
@@ -189,6 +191,41 @@ void MarsCamera::UploadMask(const char * maskName, uint16_t code /** = 0x0fff*/)
     Py_DECREF(pValue);
 }
 
+void MarsCamera::TestMaskUpload(){
+    if (verbose){
+        cout<<"Test Mask Upload"<<endl;
+    }
+//     UploadMask("/etc/mars/config/GaAs-N1-8-V5-05Nov2015-1455_software_colour_csm_full_0_mask.npy");
+//     UploadMask("/etc/mars/config/CZT-2x1-5.3-sn0105-09Jun2017-2051_colour_csm_full_0_mask.npy");
+//     UploadMask("/etc/mars/config/CZT-3x1-5.3-sn0105-18июн2017-1104_colour_csm_full_0_mask.npy");
+//     UploadMask("/etc/mars/config/CZT-3x1-5.3-sn0105-19июн2017-1217_colour_csm_full_0_mask.npy");
+//     UploadMask("/etc/mars/config/CZT-3x1-5.3-sn0105-19июн2017-1217_colour_csm_full_1_mask.npy");
+    UploadMask("/etc/mars/config/CZT-3x1-5.3-sn0105-19июн2017-1217_colour_csm_full_2_mask.npy");
+//     std::cout<<"Upload is tested"<<std::endl;
+//     PyErr_Print();
+//     PyErr_Clear();
+}
+
+void MarsCamera::TestImageDownload(){
+    if (verbose){
+        cout<<"Test Image Download"<<endl;
+    }
+    vector<uint16_t> & bitmap = GetImage(MarsCamera::LFrame, 3., 1.);
+
+  if (fmod(sqrt(bitmap.size()),1) != 0) {
+    cout<<"bitmap is not a square!"<<endl;
+  } else {
+    size_t image_size = bitmap.size();
+    size_t width = sqrt(image_size);
+    cout<<"img_size = "<<image_size<<", width = "<<width<<endl;
+    ofstream fout("img/image_cpp2");
+    for(size_t i = 0; i < image_size; i++){
+      fout<<bitmap[i]<<' ';
+      if (i%width == width - 1) fout<<endl;
+    }
+    fout.close();
+  }
+}
 
 
 
