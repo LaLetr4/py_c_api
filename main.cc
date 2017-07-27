@@ -4,6 +4,10 @@
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
+#include <string>
+#include <cstring>
+#include <typeinfo>
+#include "ConfigParser.h"
 #include "pyEmbedding.h"
 using std::cout;
 using std::cerr;
@@ -11,6 +15,7 @@ using std::endl;
 using std::ofstream;
 
 int main() {
+    ConfigParser my_cfg();
     pyEmbedding myPyEmb("pyMarsCamera_new\0","marsCameraClient\0", "/usr/lib/marsgui:/usr/lib/marsgui/marsct:/home/marsadmin/drv_py_nw/v2\0");
 // #ifndef TEST
 //     MarsCamera camera; //создали элемент класса
