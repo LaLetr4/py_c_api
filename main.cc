@@ -1,22 +1,18 @@
 
-#include "MarsCamera.h"
-#include "TestMarsCamera.h"
+// #include "MarsCamera.h"
+// #include "TestMarsCamera.h"
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
-#include <string>
-#include <cstring>
-#include <typeinfo>
-#include "ConfigParser.h"
 #include "pyEmbedding.h"
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::ofstream;
+#define TEST
 
-int main() {
-    ConfigParser my_cfg();
-    pyEmbedding myPyEmb("pyMarsCamera_new\0","marsCameraClient\0", "/usr/lib/marsgui:/usr/lib/marsgui/marsct:/home/marsadmin/drv_py_nw/v2\0");
+int main() {    
+    pyEmbedding myPyEmb("conf.ini");  //по умолчанию файл с настройками это "conf.ini" в директории с кодом
 // #ifndef TEST
 //     MarsCamera camera; //создали элемент класса
 //     //     camera.verbose = 1;  //подробный тестовый вывод, по умолчанию 0

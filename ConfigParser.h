@@ -46,7 +46,7 @@ public:
    *\param [in] deflt the value to return if no parameter with such name is found in the config file
    *\return value of the parameter with the given name
    */
-//   char * GetString(char * val,char * deflt="");
+  string GetString(string val,string deflt="");
 
   /*!
    * Local cleaning method

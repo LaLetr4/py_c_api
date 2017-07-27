@@ -16,13 +16,16 @@ ConfigParser::ConfigParser()
 };
 
 ConfigParser::ConfigParser(string ConfigFileName){
+//     cout<<"ConfigParser object is created\n";
   Clear();
   ParseFile(ConfigFileName);
+  
 }
 
 ConfigParser::~ConfigParser()
 {
   Clear();
+//   cout<<"ConfigParser object is destroyed\n";
 };
 
 void ConfigParser::Clear(){
@@ -31,6 +34,9 @@ void ConfigParser::Clear(){
 
 void ConfigParser::ParseFile(string ConfigFileName)
 {
+#ifdef TEST 
+cout<<"Configure an embedding from file "<<ConfigFileName<<endl;
+#endif
   m_fname = ConfigFileName;
   ifstream ifile;
   ifile.open(m_fname.c_str());
@@ -54,37 +60,13 @@ void ConfigParser::ParseFile(string ConfigFileName)
     }
 }
 
-// string ConfigParser::GetString(string val, string deflt)
-// {
-//   if (m_configs.count(val)){
-//     return m_configs[val];
-//   }
-//   return deflt;
-// };
-
-// long ConfigParser::GetLong(string val, long deflt)
-// {
-//   if (m_configs.count(val)){
-//     return atol(m_configs[val].c_str());
-//   }
-//   return deflt;
-// }
-// 
-// int ConfigParser::GetInt(string val, int deflt)
-// {
-//   if (m_configs.count(val)){
-//     return atoi(m_configs[val].c_str());
-//   }
-//   return deflt;
-// }
-// 
-// double ConfigParser::GetDouble(string val, double deflt)
-// {
-//   if (m_configs.count(val)){
-//     return atof(m_configs[val].c_str());
-//   }
-//   return deflt;
-// }
+string ConfigParser::GetString(string val, string deflt)
+{
+  if (m_configs.count(val)){
+    return m_configs[val];
+  }
+  return deflt;
+};
 
 void ConfigParser::Print(){
   for (std::map<string,string>::iterator it=m_configs.begin(); it!=m_configs.end(); ++it)

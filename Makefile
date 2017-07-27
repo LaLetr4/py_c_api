@@ -10,8 +10,8 @@ LDFLAGS  := -O2 -g
 LDFLAGS  += -L/usr/lib/x86_64-linux-gnu -lpython2.7
 
 ####### Files
-
-OBJECTS  := main MarsCamera ConfigParser
+#MarsCamera 
+OBJECTS  := main ConfigParser pyEmbedding
 TARGET   := code
 pref := build
 #on/of detail info about process
