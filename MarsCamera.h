@@ -3,8 +3,10 @@
 
 #include <Python.h>
 #include <cstdint>
+#include <string>
 #include <vector>
 #include <fstream>
+#include "pyEmbedding.h"
 using std::vector;
 
 class MarsCamera {
@@ -14,6 +16,8 @@ public:
 
   void Connect(const char * url) { Call("connect", url); }
   void Disconnect() { Call("disconnect"); }
+  
+  void ReadConf() { Call("initial_setup"); }
 
   /**
     Gain modes we need for OMR
@@ -66,12 +70,12 @@ public:
 
   PyObject * Instance() { return pInstance; }
   static bool verbose; //! test information on/off for debagging
-  
+
   /*test functions:*/
-    void TestMaskUpload();
-    void TestImageDownload();
-  
-private:
+//     void TestMaskUpload();
+//     void TestImageDownload();
+
+protected:
   /** variables */
   static unsigned counter;
   static PyObject * pModule, * pDict, * pClass;
@@ -114,7 +118,7 @@ private:
   /**
     Handles connection errors
   */
-  static void FatalError(const char * diag, int code = -1);
+  static void FatalError(const /*std::string*/ char * diag, int code = -1);
 
 //   void PRN(PyObject * obj); //test print method for debugging
 };

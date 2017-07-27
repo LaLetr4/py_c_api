@@ -1,0 +1,36 @@
+[97minfo: Reading file: main.cfg[0m
+[97minfo: Reading file: SB-120-350.cfg[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: min_voltage_kv 0 60[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: source_to_mtg_plate_mm 0 24.64[0m
+[97minfo: Reading file: software_settings.cfg[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: max_ua 2 100[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: reconserver_list 1 [1] [0m
+[93mwarning: marsconfig:  no keys exist for level -> 0  when searching:  ['dicom', 'station', 1]  for  #	1 #	1:	
+[0m
+[93mwarning: marsconfig:  no keys exist for level -> 0  when searching:  ['dicom', 'station', 1]  for  #		2 #		2:	
+[0m
+[93mwarning: marsconfig:  no keys exist for level -> 0  when searching:  ['dicom', 'station', 1]  for  #		4 #		4:	
+[0m
+[93mwarning: marsconfig:  no keys exist for level -> 0  when searching:  ['dicom', 'station', 1]  for  #		3 #		3:	
+[0m
+[93mwarning: marsconfig:  no keys exist for level -> 0  when searching:  ['dicom', 'station', 1]  for  #		5 #		5:	
+[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: reconstruction 2 100[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: reconstruction 2 200[0m
+[97minfo: Added dicom station: (0, 'MARS-CT') {'ae-remote': None, 'host': '', 'recon_server': '', 'pacs_disk': '', 'ae-local': 'MARS-CT', 'id': 0, 'recon_cache_disk': '', 'port': 0}[0m
+[97minfo: Added dicom station: (1, 'MARS-IPS-9') {'ae-remote': None, 'host': '159.93.78.34', 'recon_server': 'recon-engine', 'pacs_disk': 'PACS', 'ae-local': 'MARS-IPS-9', 'id': 1, 'recon_cache_disk': 'Reconstruction', 'port': 2762}[0m
+[97minfo: Station list   (by id): [0, 1][0m
+[97minfo: Station list (by name): ['MARS-IPS-9'][0m
+[97minfo: get_mars_PACS(): {'recon_cache_disk': 'Reconstruction-undefined', 'pacs_disk': 'PACS-undefined', 'ae_title': 'MARS-Dicom', 'id': 1, 'host': 'mars-dicom', 'recon_server': 'recon-engine-undefined', 'port': 5678}[0m
+[97minfo: Reading file: scan_timing.cfg[0m
+[97minfo: Reading file: CZT-3x1-5.3-sn0105-19июн2017-1217.cfg[0m
+[97minfo: Reading file: CZT-3x1-5.3-sn0105_factory_default_mechanical.cfg[0m
+[97minfo: Reading file: CZT-3x1-5.3-sn0105-19июн2017-1217_software.cfg[0m
+[97minfo: Reading file: unit4_motor_converted.cfg[0m
+[93mwarning: marsconfig.check_value: Config file record does not match schema: 0.0 2 120.0[0m
+nv_updatetime: 2017-июл-20 01:47:40
+nv_eventtime: 2017-июн-24 07:56:00
+nv_eventname: off
+nv_value: 0.0
+======================1========================
+======================2========================

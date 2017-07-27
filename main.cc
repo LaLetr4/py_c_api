@@ -1,36 +1,39 @@
 
 #include "MarsCamera.h"
+#include "TestMarsCamera.h"
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
+#include "pyEmbedding.h"
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::ofstream;
 
 int main() {
-    MarsCamera camera; //создали элемент класса
-//     camera.verbose = 1;  //подробный тестовый вывод, по умолчанию 0
-//     camera.Connect("192.168.0.135"); //соединились по IP
-//     camera.Connect("192.168.0.29"); //соединились по IP
-    camera.Connect("192.168.0.46"); //соединились по IP
-
-    camera.OMRValue("GainMode", MarsCamera::SuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
-    camera.WriteOMR(); //отправили на томограф (влить в предыдущую фукнцию?)
-    cout<<" Written OMR"<<endl;
-
-    camera.DACValue("Threshold0", 80); //уcтановили Threshold0=80 в DAC "Threshold0"
-    camera.WriteDAC();
-    cout<<" Written DACs"<<endl;
-
-    /* TODO ?? если нужно ??
-    camera.upload_image(numpy.zeros([256, 256]), 0)
-    camera.upload_image(numpy.zeros([256, 256]), 1)
-    print "uploaded image"
-
-    camera.test_mask_read_write(mask_K09 & 0x0fff)
-    print "tested mask read and write"
-    */
-    camera.TestMaskUpload();
-    camera.TestImageDownload();
-    camera.Disconnect();//отключились
+    pyEmbedding myPyEmb("pyMarsCamera_new\0","marsCameraClient\0", "/usr/lib/marsgui:/usr/lib/marsgui/marsct:/home/marsadmin/drv_py_nw/v2\0");
+// #ifndef TEST
+//     MarsCamera camera; //создали элемент класса
+//     //     camera.verbose = 1;  //подробный тестовый вывод, по умолчанию 0
+//       camera.Connect("192.168.0.135"); //соединились 
+//     //camera.Connect("192.168.0.29"); //соединились 
+//     //   camera.Connect("192.168.0.46"); //соединились 
+//      camera.ReadConf();
+//     camera.Disconnect();//отключились
+// #else
+//     TestMarsCamera test;
+//     test.Connect("192.168.0.135"); //соединились 
+//     test.ReadConf();
+//     test.OMRValue("GainMode", MarsCamera::SuperHighGain); //поcтавили в OMR "GainMode" равным kSuperHighGain
+//     test.WriteOMR(); //отправили на томограф (влить в предыдущую фукнцию?)
+//     cout<<" Written OMR"<<endl;
+// 
+//     test.DACValue("Threshold0", 60); //уcтановили Threshold0=80 в DAC "Threshold0"
+//     test.WriteDAC();
+//     cout<<" Written DACs"<<endl; 
+//     test.TestMaskUpload();
+//     test.TestImageDownload("23");
+//     test.Disconnect();//отключились
+// #endif
+    return 0; 
 }
