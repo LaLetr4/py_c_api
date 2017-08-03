@@ -36,5 +36,6 @@ int main() {
 //     test.TestImageDownload("23");
 //     test.Disconnect();//отключились
 // #endif
-    return 0; 
+    cout<<"finish"<<endl;
+    return 0;
 }

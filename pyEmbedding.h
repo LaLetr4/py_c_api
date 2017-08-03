@@ -35,7 +35,7 @@ protected:
     
       
     //Handles connection errors
-    static void FatalError(const char * diag, int code = -1);
+    static void FatalError(const char * diag, const char * spec = 0, int code = -1);
 
     //for testing
     void printEmbInfo();
