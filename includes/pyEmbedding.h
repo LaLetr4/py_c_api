@@ -99,35 +99,6 @@ public:
   virtual void call(const char * methodName, const char * s);
   virtual pyInstance * get(const char * methodName);
 };
-/*
-class pyEmbedding: public usesPython {
-public:
-    // в базовом виде - для обёртывания чего угодно (из указанного в концигах)
-    // переопределить в классах-наследниках.
-    pyEmbedding(string settings_file = "conf.ini");
 
-    virtual ~pyEmbedding();
-
-    // for testing
-    void testCall(string methodName) { Call("my_test_function"); }
-    
-    static bool verbose; //! test information on/off for debagging
-
-protected:
-    static PyObject * pModule, * pDict, * pClass;
-    PyObject * pInstance;
-
-    PyObject * Instance() { return pInstance; }
-    void setPythonPath(const char * _path);
-    void InitPy(string);
-    void FinalizePy();
-
-
-    // for testing
-    void printEmbInfo(const char * modName, const char * dictName);
-    static void PrintObj(const char * objName, PyObject * obj);
-    void PrintObjs();
-};
-*/
 
 #endif
