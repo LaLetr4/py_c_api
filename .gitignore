@@ -1,0 +1,6 @@
+# игнорировать все файлы в каталоге build/
+build/
+test.py
+conf.ini
+conf_cam.ini
+*.pyc
