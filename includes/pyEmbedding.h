@@ -2,13 +2,10 @@
 #ifndef pyEmbedding_h
 #define pyEmbedding_h
 
-// #include <iostream>
-// #include "ConfigParser.h"
 #include <string>
 #include <vector>
 #include <list>
 #include <map>
-// #include <cstring>
 #include <Python.h>
 
 using namespace std;

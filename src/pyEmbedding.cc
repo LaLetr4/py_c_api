@@ -22,28 +22,38 @@ pyEnv::pyEnv(): verbose(true) {
   cout<<"Set "<<path<<" = "<<getenv(path)<<endl;
   Py_Initialize(); // инициализируем Python C Api
   import_array(); // инициализируем NumPy C Api
-  cerr<<"pyEnv::pyEnv()"<<endl;
+  if (verbose)
+    cerr<<"pyEnv::pyEnv()"<<endl;
 }
 pyEnv::~pyEnv() {
-  cerr<<"pyEnv::~pyEnv()"<<endl;
-  cerr<<"Cleaning instances..."<<endl;
+  if (verbose) {
+    cerr<<"pyEnv::~pyEnv()"<<endl;
+    cerr<<"Cleaning instances..."<<endl;
+  }
   while(!gInstances.empty()) {
     pyInstance * ref = gInstances.back();
     delete ref;
   }
-  cerr<<"Cleaning classes..."<<endl;
+  if (verbose){    
+    cerr<<"Cleaning classes..."<<endl;
+  }
   while(!gClasses.empty()) {
     pyClass * ref = gClasses.rbegin()->second;
     delete ref;
   }
-  cerr<<"Cleaning modules..."<<endl;
+  if (verbose){
+    cerr<<"Cleaning modules..."<<endl;
+  }
   while(!gModules.empty()) {
     pyModule * ref = gModules.rbegin()->second;
     delete ref;
   }
-  cerr<<"Finalizing python interpreter..."<<endl;
+  if (verbose){
+    cerr<<"Finalizing python interpreter..."<<endl;
+  }
   Py_Finalize();
-  cerr<<"Python interpreter finalized..."<<endl;
+  if (verbose)
+    cerr<<"Python interpreter finalized..."<<endl;
 }
 void pyEnv::fatalError(const char * diag, const char * spec, int code/* = -1*/) {
   cerr<<" Error: "<<diag;
@@ -106,7 +116,8 @@ pyModule::pyModule(const char * modName): pyNamed(modName) {
   }
 }
 pyModule::~pyModule() {
-  cerr<<"pyModule::~pyModule(): "<<name<<endl;
+  if(pyEnv::get().verbose)
+    cerr<<"pyModule::~pyModule(): "<<name<<endl;
   auto & gModules = pyEnv::get().gModules;
   if(!gModules.count(name))
     pyEnv::get().fatalError("No module in table named", name.c_str());
@@ -139,7 +150,8 @@ pyInstance * pyClass::instance() {
   return new pyInstance(pInstance, name);
 }
 pyClass::~pyClass() {
-  cerr<<"pyClass::~pyClass(): "<<name<<endl;
+  if(pyEnv::get().verbose)
+    cerr<<"pyClass::~pyClass(): "<<name<<endl;
   auto & gClasses = pyEnv::get().gClasses;
   if(!gClasses.count(name))
     pyEnv::get().fatalError("No module in table named", name.c_str());
@@ -155,7 +167,8 @@ pyInstance * pyInstance::instanceOf(const char * className, const char * modName
   return pyModule::import(modName)->getClass(className)->instance();
 }
 pyInstance::~pyInstance() {
-  cerr<<"pyInstance::~pyInstance(): "<<name<<endl;
+  if(pyEnv::get().verbose)
+    cerr<<"pyInstance::~pyInstance(): "<<name<<endl;
   auto & gInstances = pyEnv::get().gInstances;
   for(auto it = gInstances.begin(); it != gInstances.end(); it++)
     if(*it == this) {

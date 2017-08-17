@@ -10,9 +10,9 @@ using std::endl;
 class configLoader: public ConfigParser { // mediator
 public:
   configLoader(string filename): ConfigParser(filename) {
-    pyEnv::PYTHONPATH = GetString("pythonPath");
+    pyEnv::PYTHONPATH = GetString("pythonPath");    //установка переменной PYTHONPATH
     pyArgSetter py_args;
-    py_args.setArgs("camera_testing");
+    py_args.setArgs("camera_testing");  //передача аргументов в интерпретатор
   }
   pyInstance * loadInstance() {
     return pyInstance::instanceOf(GetCString("className"), GetCString("moduleName"));
