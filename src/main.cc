@@ -1,34 +1,22 @@
 
+#include "cameraWrapper.h"
 #include <iostream>
-#include "pyEmbedding.h"
-#include "ConfigParser.h"
-
 using std::cout;
 using std::cerr;
 using std::endl;
 
-class configLoader: public ConfigParser { // mediator
-public:
-  configLoader(string filename): ConfigParser(filename) {
-    pyEnv::PYTHONPATH = GetString("pythonPath");    //установка переменной PYTHONPATH
-    pyArgSetter py_args;
-    py_args.setArgs("camera_testing");  //передача аргументов в интерпретатор
-  }
-  pyInstance * loadInstance() {
-    return pyInstance::instanceOf(GetCString("className"), GetCString("moduleName"));
-  }
-};
-
 int main() {
-    configLoader conf("conf_sys.ini");
-    pyInstance * sys = conf.loadInstance();
-    sys->call("test");
-    //   return 0;
-    //test camera obtain
-    pyInstance * camera = sys->get("getCamera"); // hangs
-    camera->call("check_config_loaded");
-    camera->call("finalise");
-
-    cout<<"finish"<<endl;
-    return 0;
+  cameraWrapper camera("conf_sys.ini");
+  cout<<"chips = "<<camera.getChipsNumber()<<endl;
+  int n_thr = 2;
+  int thr[2] = {1, 2};
+  camera.setThresholds(0, n_thr, thr);
+  vector<uint16_t> & bmp = camera.acquire();
+  cout<<"width = "<<camera.getWidth()<<endl;
+  cout<<"height = "<<camera.getHeight()<<endl;
+  cout<<"image size = "<<bmp.size()<<endl;
+  for(unsigned i = 0; i < 10 && i < bmp.size(); i++)
+    cout<<i<<' '<<bmp[i]<<endl;
+  cout<<"finish"<<endl;
+  return 0;
 }

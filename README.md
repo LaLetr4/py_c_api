@@ -6,22 +6,22 @@
 
 ###Должны быть реализованы следующие функции:###
 
-+ *loadConfig("path_to_file")* 
++ *loadConfig("path_to_file")* _done_partially (no custom marsCamera config)
 > загружает в камеру настройки из файла
 
-+ *getChipsNumber()* 
++ *getChipsNumber()* _done_
 > количество чипов в камере
 
-+ *setThresholds(int chip_id, int numver_of_thresholds, int * thresholds)* 
++ *setThresholds(int chip_id, int numver_of_thresholds, int * thresholds)* _done_
 > задает пороги конкретному чипу
 
-+ *getHeight()* 
++ *getHeight()* _done_
 > высота склеенного изображения из всех трех чипов
 
-+ *getWidth()* 
++ *getWidth()* _done_
 > ширина склеенного изображения из всех трех чипов
 
-+ *acquire(float expose_time, int * data)* 
++ *acquire(float expose_time, int * data)* _done_
 > возвращает склеенное изображение из всех имеющихся чипов
 
 ###Использование текущей версии###

@@ -7,6 +7,8 @@
 #include <list>
 #include <map>
 #include <Python.h>
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+#include "arrayobject.h"
 
 using namespace std;
 
@@ -86,15 +88,19 @@ private:
   pyInstance & operator=(const pyInstance &); // Prevent assignment
 protected:
   PyObject * _instance;
-  bool checkCall(PyObject * pValue, char const * methodName);
 public:
   static pyInstance * instanceOf(const char * className, const char * modName); // фабричный метод
   virtual ~pyInstance();
   virtual void call(const char * methodName);
   virtual void call(const char * methodName, int i);
+  virtual void call(const char * methodName, float f);
   virtual void call(const char * methodName, PyObject * pArg);
   virtual void call(const char * methodName, const char * s);
   virtual pyInstance * get(const char * methodName);
+  virtual long getInt(const char * methodName);
+  virtual long getAttrInt(const char * attrName);
+  operator PyObject*() { return _instance; }
+  static bool checkCall(PyObject * pValue, char const * methodName);
 };
 
 

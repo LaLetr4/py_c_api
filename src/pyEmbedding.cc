@@ -3,9 +3,9 @@
 #include <cstring>
 #include <unistd.h>
 #include "pyEmbedding.h"
-#include <Python.h>
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-#include "arrayobject.h"
+// #include <Python.h>
+// #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+// #include "arrayobject.h"
 
 using std::cout;
 using std::cerr;
@@ -187,6 +187,11 @@ void pyInstance::call(const char * methodName, int i) {
   if(checkCall(pValue, methodName))
     Py_DECREF(pValue);
 }
+void pyInstance::call(const char * methodName, float f) {
+  PyObject * pValue = PyObject_CallMethod(_instance, const_cast<char*>(methodName), "(f)", f);
+  if(checkCall(pValue, methodName))
+    Py_DECREF(pValue);
+}
 void pyInstance::call(const char * methodName, PyObject * pArg) {
   PyObject * pName = PyUnicode_FromString(methodName);
   PyObject * pValue = PyObject_CallMethodObjArgs(_instance, pName, pArg, NULL);
@@ -205,6 +210,37 @@ pyInstance * pyInstance::get(const char * methodName) {
     return new pyInstance(pValue, methodName);
   return 0;
 }
+long pyInstance::getInt(const char * methodName) {
+  PyObject * pInt = PyObject_CallMethod(_instance, const_cast<char*>(methodName), "()");
+  if(!pInt) {
+    cerr<<"Class `"<<name<<"' instance has no method `"<<methodName<<"'"<<std::endl;
+    return LONG_MIN;
+  }
+  if(!PyInt_Check(pInt)) {
+    cerr<<"Method `"<<methodName<<"' of class `"<<name<<"' returns non-integer type"<<endl;
+    Py_DECREF(pInt);
+    return LONG_MIN;
+  }
+  long ret = PyInt_AsLong(pInt);
+  Py_DECREF(pInt);
+  return ret;
+}
+long pyInstance::getAttrInt(const char * attrName) {
+  PyObject * pInt = PyObject_GetAttrString(_instance, attrName);
+  if(!pInt) {
+    cerr<<"Class `"<<name<<"' instance has no attribute `"<<attrName<<"'"<<std::endl;
+    return LONG_MIN;
+  }
+  if(!PyInt_Check(pInt)) {
+    cerr<<"Attribute `"<<attrName<<"' of class `"<<name<<"' is not integer type"<<endl;
+    Py_DECREF(pInt);
+    return LONG_MIN;
+  }
+  long ret = PyInt_AsLong(pInt);
+  Py_DECREF(pInt);
+  return ret;
+}
+
 bool pyInstance::checkCall(PyObject * pValue, char const * methodName) {
   if(pValue == NULL) {
     cerr<<" Error: Method "<<methodName<<" call failed"<<endl;

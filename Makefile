@@ -14,7 +14,7 @@ LDFLAGS  += -L/usr/lib/python2.7/config-x86_64-linux-gnu -L/usr/lib -lpython2.7 
 
 ####### Files
 #MarsCamera 
-OBJECTS  := main ConfigParser pyEmbedding 
+OBJECTS  := main ConfigParser pyEmbedding cameraWrapper
 pref1 := includes
 pref2 := src
 TARGET   := code

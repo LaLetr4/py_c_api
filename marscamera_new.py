@@ -381,7 +381,8 @@ class marsCamera(marsObservable):
 		self.poll_thread = marsthread.new_thread(self.get_polling)
 		
         def getChipCount(self):
-                print "chip count is ",self._chipcount
+                print "#### chip count is ",self._chipcount
+                return self._chipcount
                 
         def test(self):
                 print  "marssystem test"
@@ -1065,6 +1066,7 @@ class marsCamera(marsObservable):
 		if minposy == 200000000:
 			minposy = 0
 		imagesize = numpy.array(self.get_frame(0, counter, frames[0])).squeeze().shape
+                print "#### numpy.zeros", imagesize[0] + maxposy - minposy, imagesize[1] + maxposx - minposx
 		ret_img = numpy.zeros([imagesize[0] + maxposy - minposy, imagesize[1] + maxposx - minposx])
 
 		for chipid in range(self.chipcount):
