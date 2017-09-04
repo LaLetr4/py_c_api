@@ -99,6 +99,7 @@ public:
   virtual pyInstance * get(const char * methodName);
   virtual long getInt(const char * methodName);
   virtual long getAttrInt(const char * attrName);
+  virtual long toInt(PyObject * pInt, const char * diag = "");
   operator PyObject*() { return _instance; }
   static bool checkCall(PyObject * pValue, char const * methodName);
 };

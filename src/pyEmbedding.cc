@@ -34,21 +34,21 @@ pyEnv::~pyEnv() {
     pyInstance * ref = gInstances.back();
     delete ref;
   }
-  if (verbose){    
+  if (verbose) {
     cerr<<"Cleaning classes..."<<endl;
   }
   while(!gClasses.empty()) {
     pyClass * ref = gClasses.rbegin()->second;
     delete ref;
   }
-  if (verbose){
+  if (verbose) {
     cerr<<"Cleaning modules..."<<endl;
   }
   while(!gModules.empty()) {
     pyModule * ref = gModules.rbegin()->second;
     delete ref;
   }
-  if (verbose){
+  if (verbose) {
     cerr<<"Finalizing python interpreter..."<<endl;
   }
   Py_Finalize();
@@ -212,27 +212,19 @@ pyInstance * pyInstance::get(const char * methodName) {
 }
 long pyInstance::getInt(const char * methodName) {
   PyObject * pInt = PyObject_CallMethod(_instance, const_cast<char*>(methodName), "()");
-  if(!pInt) {
-    cerr<<"Class `"<<name<<"' instance has no method `"<<methodName<<"'"<<std::endl;
-    return LONG_MIN;
-  }
-  if(!PyInt_Check(pInt)) {
-    cerr<<"Method `"<<methodName<<"' of class `"<<name<<"' returns non-integer type"<<endl;
-    Py_DECREF(pInt);
-    return LONG_MIN;
-  }
-  long ret = PyInt_AsLong(pInt);
-  Py_DECREF(pInt);
-  return ret;
+  return toInt(pInt);
 }
 long pyInstance::getAttrInt(const char * attrName) {
   PyObject * pInt = PyObject_GetAttrString(_instance, attrName);
+  return toInt(pInt);
+}
+long pyInstance::toInt(PyObject * pInt, const char * diag) {
   if(!pInt) {
-    cerr<<"Class `"<<name<<"' instance has no attribute `"<<attrName<<"'"<<std::endl;
+    cerr<<"Class `"<<name<<"' instance: no `"<<diag<<"'"<<std::endl;
     return LONG_MIN;
   }
   if(!PyInt_Check(pInt)) {
-    cerr<<"Attribute `"<<attrName<<"' of class `"<<name<<"' is not integer type"<<endl;
+    cerr<<"Class `"<<name<<": `"<<diag<<"': not integer"<<endl;
     Py_DECREF(pInt);
     return LONG_MIN;
   }
