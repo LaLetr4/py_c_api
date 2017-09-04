@@ -24,6 +24,9 @@
 + *acquire(float expose_time, int * data)* _done_
 > возвращает склеенное изображение из всех имеющихся чипов
 
++ *setBias(float bias)*
+> задает напряжение напряжение на чипах
+
 ###Использование текущей версии###
 
 To compile code with verbose output use: make verb=1

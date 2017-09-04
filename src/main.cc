@@ -10,7 +10,7 @@ int main() {
   cout<<"chips = "<<camera.getChipsNumber()<<endl;
   int n_thr = 2;
   int thr[2] = {1, 2};
-  camera.setThresholds(0, n_thr, thr);
+  camera.setThresholds(0, n_thr, thr);  //chip_id, сколько порогов будем устанавливать, какие значения (будут установлены по очереди, начиная с 0)
   vector<uint16_t> & bmp = camera.acquire();
   cout<<"width = "<<camera.getWidth()<<endl;
   cout<<"height = "<<camera.getHeight()<<endl;
