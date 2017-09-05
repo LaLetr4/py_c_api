@@ -6,7 +6,7 @@ using std::cerr;
 using std::endl;
 
 int main() {
-  cameraWrapper camera("conf_sys.ini", "test");
+  cameraWrapper camera("conf_sys.ini", "test");//cameraWrapper camera("conf_sys.ini"); //для не-теста
   cout<<"chips = "<<camera.getChipsNumber()<<endl;
   camera.setBias(10);
   //установка порогов

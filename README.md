@@ -27,11 +27,14 @@
 + *setBias(int bias)* _done_
 > задает напряжение напряжение на чипах
 
-+ *saveAsTxt(string image_name, string folder) * _done_
++ *saveAsTxt(string image_name, string folder)* _done_
 > сохраняет картинку в текстовый файл
 
 ###Использование текущей версии###
 
 To compile code with verbose output use: make verb=1
+
 Running code: ./code
+
+To omit control printing change pyEmbedding:19: _pyEnv::pyEnv(): verbose(false)_
 
