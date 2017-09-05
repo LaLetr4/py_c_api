@@ -24,8 +24,11 @@
 + *acquire(float expose_time, int * data)* _done_
 > возвращает склеенное изображение из всех имеющихся чипов
 
-+ *setBias(float bias)*
++ *setBias(int bias)* _done_
 > задает напряжение напряжение на чипах
+
++ *saveAsTxt(string image_name, string folder) * _done_
+> сохраняет картинку в текстовый файл
 
 ###Использование текущей версии###
 

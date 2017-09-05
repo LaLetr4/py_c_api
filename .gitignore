@@ -5,4 +5,5 @@ conf.ini
 conf_cam.ini
 *.pyc
 archive/
+img/
 code

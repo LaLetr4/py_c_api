@@ -4,10 +4,11 @@
 #include <iostream>
 #include <fstream>
 
-// #include <sys/types.h>
-// #include <sys/stat.h>
-// #include <unistd.h>
-// #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <cstdlib>
 
 using std::cerr;
 using std::endl;
@@ -142,6 +143,5 @@ void cameraWrapper::saveAsTxt(std::string image_name, std::string folder) {
     if (i%width == width - 1) fout<<endl;
   }
   fout.close();
-//   cout<<"image file descriptor = "<<fileno(fout)<<endl;
   cout<<"image \""<<image_name<<"\" is created in \""<<folder<<"/\""<<endl;
 }
